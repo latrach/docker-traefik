@@ -1,0 +1,39 @@
+###> custom ###
+/nbproject/
+/.idea/
+/.vscode/
+/src/Migrations/
+/assets/libs/pdf.js/
+/docker/certs/
+.ssh
+/docker/data/
+/docker/repo/
+nesws-sf
+api-partner-sf
+.php-version
+###< custom ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/*/*.decrypt.private.php
+/public/bundles/
+/public/uploads/
+/var/
+/vendor/
+/test/
+/tests/
+###< symfony/framework-bundle ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
