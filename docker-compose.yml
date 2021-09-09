@@ -4,6 +4,7 @@ services:
   traefik:
     image: traefik:2.5
     container_name: traefik
+    restart: always
     depends_on:
       - openssl
     ports:
@@ -18,10 +19,32 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik=true"
+  #===================== https://portainer.docker.dev
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "9090:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./docker/data/portainer:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=http,https"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.dev`)"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
   #=====================
   openssl:
     build: ./docker/openssl
     image: openssl:1.0
+    restart: always
     container_name: openssl
     volumes:
       - ./docker/openssl:/openssl
