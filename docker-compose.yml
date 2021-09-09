@@ -1,6 +1,9 @@
 version: "3.8"
 services:
-  #===================== https://traefik.docker.dev
+  #===================== 
+  # https://traefik.docker.localhost
+  # https://traefik.docker.dev
+  # http://localhost:8080
   traefik:
     image: traefik:2.5
     container_name: traefik
@@ -19,7 +22,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik=true"
-  #===================== https://portainer.docker.dev
+  #=====================
+  # https://portainer.docker.localhost
+  # https://portainer.docker.dev
+  # http://localhost:9000
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
@@ -28,7 +34,7 @@ services:
     depends_on:
       - traefik
     ports:
-      - "9090:9000"
+      - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
@@ -37,7 +43,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=http,https"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.dev`)"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`,`portainer.docker.dev`)"
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
   #=====================
