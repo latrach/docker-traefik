@@ -7,7 +7,7 @@ services:
   traefik:
     image: traefik:2.5
     container_name: traefik
-    restart: always
+    #restart: always
     depends_on:
       - openssl
     ports:
@@ -39,7 +39,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - ./docker/data/portainer:/data
+      - portainer:/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=http,https"
@@ -56,7 +56,9 @@ services:
       - ./docker/openssl:/openssl
       - ./docker/openssl/domains.ext:/domains.ext
       - ./docker/certs:/certs
-
+volumes:
+  portainer:
+    name: portainer
 networks:
   default:
     name: traefik

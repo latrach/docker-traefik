@@ -1,0 +1,64 @@
+version: "3.8"
+services:
+  #===================== 
+  # https://traefik.docker.localhost
+  # https://traefik.docker.dev
+  # http://localhost:8080
+  traefik:
+    image: traefik:2.5
+    container_name: traefik
+    restart: always
+    depends_on:
+      - openssl
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./docker/traefik/config.yml:/etc/traefik/config.yml:ro
+      - ./docker/certs:/etc/certs:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik=true"
+  #=====================
+  # https://portainer.docker.localhost
+  # https://portainer.docker.dev
+  # http://localhost:9000
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - portainer:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=http,https"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`,`portainer.docker.dev`)"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+  #=====================
+  openssl:
+    build: ./docker/openssl
+    image: openssl:1.0
+    restart: always
+    container_name: openssl
+    volumes:
+      - ./docker/openssl:/openssl
+      - ./docker/openssl/domains.ext:/domains.ext
+      - ./docker/certs:/certs
+volumes:
+  portainer:
+    name: portainer
+networks:
+  default:
+    name: traefik
