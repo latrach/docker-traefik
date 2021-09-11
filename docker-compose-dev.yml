@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  #===================== 
+  #=====================
   # https://traefik.docker.localhost
   # https://traefik.docker.dev
   # http://localhost:8080
