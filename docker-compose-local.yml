@@ -30,7 +30,7 @@ services:
     image: portainer/portainer-ce
     container_name: portainer
     command: -H unix:///var/run/docker.sock
-    restart: always
+    #restart: always
     depends_on:
       - traefik
     ports:
@@ -50,7 +50,7 @@ services:
   openssl:
     build: ./docker/openssl
     image: openssl:1.0
-    restart: always
+    #restart: always
     container_name: openssl
     volumes:
       - ./docker/openssl:/openssl
