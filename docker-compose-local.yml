@@ -48,7 +48,7 @@ services:
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
   #=====================
   openssl:
-    image: gitlab.ealis-cloud.com/nes/docker-images/openssl:1.0
+    image: gitlab.ealis-cloud.com:5050/nes/docker-images/openssl:1.0
     #restart: always
     container_name: openssl
     volumes:
