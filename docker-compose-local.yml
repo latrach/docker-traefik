@@ -54,6 +54,7 @@ services:
     image: maildev/maildev
     container_name: maildev
     #restart: always
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
     depends_on:
       - traefik
     ports:
