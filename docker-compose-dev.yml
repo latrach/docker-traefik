@@ -47,6 +47,25 @@ services:
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
   #=====================
+  # https://maildev.docker.localhost
+  # https://maildev.docker.dev
+  # http://localhost:9000
+  maildev:
+    image: maildev/maildev
+    container_name: maildev
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "1025:1025"
+      - "1080:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.maildev.entrypoints=http,https"
+      - "traefik.http.routers.maildev.rule=Host(`maildev.docker.localhost`,`maildev.docker.dev`)"
+      - "traefik.http.routers.maildev.tls=true"
+      - "traefik.http.services.maildev.loadbalancer.server.port=80"
+  #=====================
   openssl:
     image: gitlab.ealis-cloud.com:5050/nes/docker-images/openssl:1.0
     restart: always
@@ -54,7 +73,7 @@ services:
     volumes:
       - ./docker/openssl:/openssl
       - ./docker/openssl/domains.ext:/domains.ext
-      - ./docker/certs:/certs
+      - ./docker/certs:/certs      
 volumes:
   portainer:
     name: portainer
