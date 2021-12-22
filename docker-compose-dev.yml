@@ -27,7 +27,7 @@ services:
   # https://portainer.docker.dev
   # http://localhost:9000
   portainer:
-    image: portainer/portainer-ce
+    image: portainer/portainer-ee
     container_name: portainer
     command: -H unix:///var/run/docker.sock
     restart: always
