@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  #===================== 
+  #=====================
   # https://traefik.docker.localhost
   # https://traefik.docker.dev
   # http://localhost:8080
@@ -54,18 +54,18 @@ services:
     image: maildev/maildev
     container_name: maildev
     #restart: always
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    #command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
     depends_on:
       - traefik
     ports:
-      - "1025:25"
-      - "1080:80"
+      - "1025:1025"
+      - "1080:1080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.maildev.entrypoints=http,https"
       - "traefik.http.routers.maildev.rule=Host(`maildev.docker.localhost`,`maildev.docker.dev`)"
       - "traefik.http.routers.maildev.tls=true"
-      - "traefik.http.services.maildev.loadbalancer.server.port=80"
+      - "traefik.http.services.maildev.loadbalancer.server.port=1080"
   #=====================
   openssl:
     image: slatrach/openssl:1.0
