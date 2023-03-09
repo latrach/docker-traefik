@@ -7,7 +7,7 @@ services:
   traefik:
     image: traefik:2.5
     container_name: traefik
-    restart: always
+    #restart: always
     depends_on:
       - openssl
     ports:
@@ -27,10 +27,10 @@ services:
   # https://portainer.docker.dev
   # http://localhost:9000
   portainer:
-    image: portainer/portainer-ee
+    image: portainer/portainer-ce
     container_name: portainer
     command: -H unix:///var/run/docker.sock
-    restart: always
+    #restart: always
     depends_on:
       - traefik
     ports:
@@ -49,32 +49,32 @@ services:
   #=====================
   # https://maildev.docker.localhost
   # https://maildev.docker.dev
-  # http://localhost:9000
+  # http://localhost:1080
   maildev:
-    image: maildev/maildev
+    image: maildev/maildev:2.0.5
     container_name: maildev
     restart: always
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    #command: bin/maildev --web 80 --smtp 25 --verbose STARTTLS
     depends_on:
       - traefik
     ports:
       - "1025:1025"
-      - "1080:80"
+      - "1080:1080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.maildev.entrypoints=http,https"
       - "traefik.http.routers.maildev.rule=Host(`maildev.docker.localhost`,`maildev.docker.dev`)"
       - "traefik.http.routers.maildev.tls=true"
-      - "traefik.http.services.maildev.loadbalancer.server.port=80"
+      - "traefik.http.services.maildev.loadbalancer.server.port=1080"
   #=====================
   openssl:
     image: slatrach/openssl:1.0
-    restart: always
+    #restart: always
     container_name: openssl
     volumes:
       - ./docker/openssl:/openssl
       - ./docker/openssl/domains.ext:/domains.ext
-      - ./docker/certs:/certs      
+      - ./docker/certs:/certs
 volumes:
   portainer:
     name: portainer
