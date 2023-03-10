@@ -5,9 +5,9 @@ services:
   # https://traefik.docker.dev
   # http://localhost:8080
   traefik:
-    image: traefik:2.5
+    image: traefik:2.9.8
     container_name: traefik
-    #restart: always
+    restart: always
     depends_on:
       - openssl
     ports:
@@ -27,10 +27,10 @@ services:
   # https://portainer.docker.dev
   # http://localhost:9000
   portainer:
-    image: portainer/portainer-ce
+    image: portainer/portainer-ce:2.17.1
     container_name: portainer
     command: -H unix:///var/run/docker.sock
-    #restart: always
+    restart: always
     depends_on:
       - traefik
     ports:
@@ -71,7 +71,7 @@ services:
   #=====================
   openssl:
     image: slatrach/openssl:1.0
-    #restart: always
+    restart: always
     container_name: openssl
     volumes:
       - ./docker/openssl:/openssl

@@ -5,7 +5,7 @@ services:
   # https://traefik.docker.dev
   # http://localhost:8080
   traefik:
-    image: traefik:2.5
+    image: traefik:2.9.8
     container_name: traefik
     #restart: always
     depends_on:
@@ -27,7 +27,7 @@ services:
   # https://portainer.docker.dev
   # http://localhost:9000
   portainer:
-    image: portainer/portainer-ce
+    image: portainer/portainer-ce:2.17.1
     container_name: portainer
     command: -H unix:///var/run/docker.sock
     #restart: always
