@@ -55,6 +55,8 @@ services:
     container_name: maildev
     restart: always
     #command: bin/maildev --web 80 --smtp 25 --verbose STARTTLS
+    healthcheck:
+      disable: true
     depends_on:
       - traefik
     ports:
