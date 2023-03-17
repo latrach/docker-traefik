@@ -20,7 +20,10 @@ services:
       - ./docker/certs:/etc/certs:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik=true"
+      - "traefik.http.routers.traefik.entrypoints=http,https"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.docker.localhost`)"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
   #=====================
   # https://portainer.docker.localhost
   # http://localhost:9000
