@@ -43,7 +43,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=http,https"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`,`portainer.docker.dev`)"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`)"
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
   #=====================
@@ -65,7 +65,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.maildev.entrypoints=http,https"
-      - "traefik.http.routers.maildev.rule=Host(`maildev.docker.localhost`,`maildev.docker.dev`)"
+      - "traefik.http.routers.maildev.rule=Host(`maildev.docker.localhost`)"
       - "traefik.http.routers.maildev.tls=true"
       - "traefik.http.services.maildev.loadbalancer.server.port=1080"
   #=====================

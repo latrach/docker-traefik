@@ -1,7 +1,7 @@
 http:
   routers:
     traefik:
-      rule: "Host(`traefik.docker.localhost`,`traefik.docker.dev`)"
+      rule: "Host(`traefik.docker.localhost`)"
       service: "api@internal"
       # middlewares:
       #   - cors
