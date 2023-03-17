@@ -2,7 +2,6 @@ version: "3.8"
 services:
   #=====================
   # https://traefik.docker.localhost
-  # https://traefik.docker.dev
   # http://localhost:8080
   traefik:
     image: traefik:2.9.8
@@ -24,7 +23,6 @@ services:
       - "traefik.http.routers.traefik=true"
   #=====================
   # https://portainer.docker.localhost
-  # https://portainer.docker.dev
   # http://localhost:9000
   portainer:
     image: portainer/portainer-ce:2.17.1
@@ -48,7 +46,6 @@ services:
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
   #=====================
   # https://maildev.docker.localhost
-  # https://maildev.docker.dev
   # http://localhost:1080
   maildev:
     image: maildev/maildev:2.0.5
