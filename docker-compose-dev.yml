@@ -70,7 +70,7 @@ services:
       - "traefik.http.services.maildev.loadbalancer.server.port=1080"
   #=====================
   openssl:
-    image: slatrach/openssl:1.0
+    image: ealis/openssl:1.0
     restart: always
     container_name: openssl
     volumes:
