@@ -71,11 +71,12 @@ git-push: ## Git push develop and recette. Usage: make git-push m="commit messag
 	git fetch --all
 	git add .
 	git commit -m "$(m)"
-	git push
+	git push -u origin develop
 	git checkout recette
 	git merge --ff --no-edit develop
-	git push
+	git push -u origin recette
 	git checkout develop
+	git push -u github develop
 .PHONY: git-push
 
 #===================================================================================================
@@ -193,7 +194,7 @@ tests-coverage: ## Run tests with coverage.
 .PHONY: tests-coverage
 
 #===================================================================================================
-#  🧵  OTHERS SCRIPTS
+#  🧵  OTHERS SH SCRIPTS
 #===================================================================================================
 sh-recursive-cp-makefile: ## Copy common Makefile to all webapp projects recursively.
 	./sh-recursive-cp-makefile
