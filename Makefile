@@ -204,5 +204,5 @@ sh-recursive-rm-file: ## Remove file recursively, Usage: make sh-recursive-rm-fi
 .PHONY: sh-recursive-rm-file
 
 sh-recursive-git-push: ## Git push recursively, Usage: make sh-recursive-git-push m="commit message"
-	./sh-recursive-git-push $(m)
+	./sh-recursive-git-push "$(m)"
 .PHONY: sh-recursive-git-push
