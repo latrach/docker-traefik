@@ -37,7 +37,8 @@ docker-up: ## Start docker containers.
 	docker compose -f ../docker-tunnelssh/$(DOCKER_COMPOSE_FILE) up -d
 	docker compose -f ../nesws-sf4/$(DOCKER_COMPOSE_FILE) up -d
 	docker compose -f $(DOCKER_COMPOSE_FILE) up -d
-	docker exec -it $(DOCKER_CONTAINER_NAME) bash -c 'y | composer require --dev phpro/grumphp-shim'
+	docker exec -it $(DOCKER_CONTAINER_NAME) composer config --no-plugins allow-plugins.phpro/grumphp-shim true
+	docker exec -it $(DOCKER_CONTAINER_NAME) composer require --dev phpro/grumphp-shim
 .PHONY: docker-up
 
 docker-stop: ## Stop docker containers.
