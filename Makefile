@@ -5,6 +5,7 @@ DOCKER_CONTAINER_NAME = $(shell cat .env | grep APP_CONTAINER_NAME | cut -d'=' -
 DOCKER_COMPOSE_FILE = docker-compose-local.yml
 PHPQA = jakzal/phpqa:php8.1
 DOCKER-COMMAND = $(or $c, bash)
+CURRENT_BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
 
 #===================================================================================================
 #  🆘  HELP
@@ -67,17 +68,30 @@ composer-validate-deep: ## Validate composer.json and composer.lock files in str
 #===================================================================================================
 #  ⚡  GIT
 #===================================================================================================
-git-push: ## Git push develop and recette. Usage: make git-push m="commit message"
-	git fetch --all
-	git add .
-	git commit -m "$(m)"
-	git push -u origin develop
-	git checkout recette
-	git merge --ff --no-edit develop
-	git push -u origin recette
-	git checkout develop
-	git push -u github develop
-.PHONY: git-push
+.ONESHELL:
+git-commit-push: ## Git commit and push to current and recette branchs. Usage: make git-commit-push m="commit message"
+	@set -eu
+	# commit message is mandatory for commit and push
+	if [ -z "$(m)" ]
+	then
+		echo 'Commit message missing. Usage: make git-commit-push m="commit message"'
+		exit 1
+	else
+		git add .
+		git commit -m "$(m)"
+		git pull origin $(CURRENT_BRANCH)
+		git push -u origin $(CURRENT_BRANCH)
+	fi
+    # Merge and push to recette branch
+	if [ `git rev-parse --verify recette 2>/dev/null` ]
+	then
+		git checkout recette
+		git merge --ff --no-edit $(CURRENT_BRANCH)
+		git push -u origin recette
+		git checkout develop
+		git push -u github $(CURRENT_BRANCH)
+	fi
+.PHONY: git-commit-push
 
 #===================================================================================================
 #  🔳  CONSOLE
@@ -197,13 +211,13 @@ tests-coverage: ## Run tests with coverage.
 #  🧵  OTHERS SH SCRIPTS
 #===================================================================================================
 sh-recursive-cp-makefile: ## Copy common Makefile to all webapp projects recursively.
-	./sh-recursive-cp-makefile
+	./bin/recursive-cp-makefile
 .PHONY: sh-recursive-cp-makefile
 
 sh-recursive-rm-file: ## Remove file recursively, Usage: make sh-recursive-rm-file f="file"
-	./sh-recursive-rm-file $(f)
+	./bin/recursive-rm-file $(f)
 .PHONY: sh-recursive-rm-file
 
 sh-recursive-git-push: ## Git push recursively, Usage: make sh-recursive-git-push m="commit message"
-	./sh-recursive-git-push "$(m)"
+	./bin/recursive-git-push "$(m)"
 .PHONY: sh-recursive-git-push
