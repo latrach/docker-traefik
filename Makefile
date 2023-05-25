@@ -28,6 +28,7 @@ docker: docker-up ## Execute docker command, Usage: make docker c="command"
 
 docker-exec: docker-up ## Docker exec, Usage: make docker-exec c="command"
 	docker exec -it $(DOCKER_CONTAINER_NAME) $(DOCKER-COMMAND)
+
 .PHONY: docker-exec
 
 docker-up: ## Start docker containers.
@@ -36,6 +37,7 @@ docker-up: ## Start docker containers.
 	docker compose -f ../docker-tunnelssh/$(DOCKER_COMPOSE_FILE) up -d
 	docker compose -f ../nesws-sf4/$(DOCKER_COMPOSE_FILE) up -d
 	docker compose -f $(DOCKER_COMPOSE_FILE) up -d
+	docker exec -it $(DOCKER_CONTAINER_NAME) composer require --dev phpro/grumphp-shim
 .PHONY: docker-up
 
 docker-stop: ## Stop docker containers.
@@ -45,9 +47,9 @@ docker-stop: ## Stop docker containers.
 #===================================================================================================
 #  📦  COMPOSER
 #===================================================================================================
-composer: docker-up ## Ecexute composer commande, Usage: make composer c="command"
-	docker exec -it $(DOCKER_CONTAINER_NAME) composer $(c)
-.PHONY: composer
+composer-require: docker-up ## Add composer dependencies, Usage: make composer-require p="package-name"
+	docker exec -it $(DOCKER_CONTAINER_NAME) composer require $(p)
+.PHONY: composer-require
 
 composer-install: ## Install composer dependencies.
 	docker exec -it $(DOCKER_CONTAINER_NAME) composer install
@@ -70,34 +72,18 @@ composer-validate-deep: ## Validate composer.json and composer.lock files in str
 #===================================================================================================
 .ONESHELL:
 git-commit-push: ## Git commit and push to current and recette branchs. Usage: make git-commit-push m="commit message"
-	@set -eu
-	# commit message is mandatory for commit and push
-	if [ -z "$(m)" ]
-	then
-		echo 'Commit message missing. Usage: make git-commit-push m="commit message"'
-		exit 1
-	else
-		git add .
-		git commit -m "$(m)"
-		git pull origin $(CURRENT_BRANCH)
-		git push -u origin $(CURRENT_BRANCH)
-	fi
-    # Merge and push to recette branch
-	if [ `git rev-parse --verify recette 2>/dev/null` ]
-	then
-		git checkout recette
-		git merge --ff --no-edit $(CURRENT_BRANCH)
-		git push -u origin recette
-		git checkout develop
-		git push -u github $(CURRENT_BRANCH)
-	fi
+	../webapp-cli/bin/git-commit-push $(m)
 .PHONY: git-commit-push
+
+git-before-commit: qa-phpstan qa-security-checker  ## Run before commit.
+.PHONY: git-before-commit
 
 #===================================================================================================
 #  🔳  CONSOLE
 #===================================================================================================
 console: docker-up ## Execute symfony console commande, Usage: make console c="command"
 	docker exec -it $(DOCKER_CONTAINER_NAME) php bin/console $(c)
+
 .PHONY: console
 
 console-cc: ## Cache clear.
@@ -208,16 +194,16 @@ tests-coverage: ## Run tests with coverage.
 .PHONY: tests-coverage
 
 #===================================================================================================
-#  🧵  OTHERS SH SCRIPTS
+#  🧵  OTHERS SH SCRIPTS (for administrator)
 #===================================================================================================
-sh-recursive-cp-makefile: ## Copy common Makefile to all webapp projects recursively.
-	./bin/recursive-cp-makefile
-.PHONY: sh-recursive-cp-makefile
+admin-recursive-cp-file: ## Copy file recursively, Usage: make sh-recursive-cp-file f="file"
+	../webapp-cli/bin/recursive-cp-file $(f)
+.PHONY: admin-recursive-cp-makefile
 
-sh-recursive-rm-file: ## Remove file recursively, Usage: make sh-recursive-rm-file f="file"
-	./bin/recursive-rm-file $(f)
-.PHONY: sh-recursive-rm-file
+admin-recursive-rm-file: ## Remove file recursively, Usage: make sh-recursive-rm-file f="file"
+	../webapp-cli/bin/recursive-rm-file $(f)
+.PHONY: admin-recursive-rm-file
 
-sh-recursive-git-push: ## Git push recursively, Usage: make sh-recursive-git-push m="commit message"
-	./bin/recursive-git-push "$(m)"
-.PHONY: sh-recursive-git-push
+admin-recursive-git-push: ## Git push recursively, Usage: make sh-recursive-git-push m="commit message"
+	../webapp-cli/bin/recursive-git-push "$(m)"
+.PHONY: admin-recursive-git-push
