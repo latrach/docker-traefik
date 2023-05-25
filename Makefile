@@ -37,7 +37,7 @@ docker-up: ## Start docker containers.
 	docker compose -f ../docker-tunnelssh/$(DOCKER_COMPOSE_FILE) up -d
 	docker compose -f ../nesws-sf4/$(DOCKER_COMPOSE_FILE) up -d
 	docker compose -f $(DOCKER_COMPOSE_FILE) up -d
-	docker exec -it $(DOCKER_CONTAINER_NAME) composer require --dev phpro/grumphp-shim
+	docker exec -it $(DOCKER_CONTAINER_NAME) y | composer require --dev phpro/grumphp-shim
 .PHONY: docker-up
 
 docker-stop: ## Stop docker containers.
@@ -70,7 +70,6 @@ composer-validate-deep: ## Validate composer.json and composer.lock files in str
 #===================================================================================================
 #  ⚡  GIT
 #===================================================================================================
-.ONESHELL:
 git-commit-push: ## Git commit and push to current and recette branchs. Usage: make git-commit-push m="commit message"
 	../webapp-cli/bin/git-commit-push $(m)
 .PHONY: git-commit-push
@@ -116,7 +115,6 @@ npm-add: ## Add npm dependencies, Usage: make npm-add p="package-name"
 npm-set: ## Install npm dependencies.
 	docker exec -it $(DOCKER_CONTAINER_NAME) npm set strict-ssl false
 	docker exec -it $(DOCKER_CONTAINER_NAME) npm install caniuse-lite browserslist --save-dev
-	docker exec -it $(DOCKER_CONTAINER_NAME) npm audit fix
 .PHONY: npm-set
 
 npm-install: npm-set ## Install npm dependencies.
