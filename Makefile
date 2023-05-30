@@ -2,7 +2,7 @@
 # 🎨 VARIABLES
 #===================================================================================================
 DOCKER_CONTAINER_NAME = $(shell cat .env | grep APP_CONTAINER_NAME | cut -d'=' -f2)
-DOCKER_COMPOSE_FILE = docker-compose-local.yml
+DOCKER_COMPOSE_FILE = docker-compose.yml
 PHPQA = jakzal/phpqa:php8.1
 DOCKER-COMMAND = $(or $c, bash)
 CURRENT_BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
