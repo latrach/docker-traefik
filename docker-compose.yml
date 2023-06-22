@@ -6,7 +6,6 @@ services:
   traefik:
     image: traefik:2.9.8
     container_name: traefik
-    #restart: always
     depends_on:
       - openssl
     ports:
@@ -31,7 +30,6 @@ services:
     image: portainer/portainer-ce:2.17.1
     container_name: portainer
     command: -H unix:///var/run/docker.sock
-    #restart: always
     depends_on:
       - traefik
     ports:
@@ -53,7 +51,6 @@ services:
   maildev:
     image: maildev/maildev:2.0.5
     container_name: maildev
-    #restart: always
     #command: bin/maildev --web 80 --smtp 25 --verbose STARTTLS
     healthcheck:
       disable: true
@@ -71,7 +68,6 @@ services:
   #=====================
   openssl:
     image: ealis/openssl:1.1
-    #restart: always
     container_name: openssl
     volumes:
       - ./openssl/generate-certs.sh:/home/openssl/generate-certs
