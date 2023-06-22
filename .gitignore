@@ -5,6 +5,7 @@
 /src/Migrations/
 /assets/libs/pdf.js/
 /docker/certs/
+/certs/
 .ssh
 /docker/data/
 /docker/repo/
