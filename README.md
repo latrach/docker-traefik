@@ -10,6 +10,6 @@ openssl req -x509 -nodes -new -sha256 -days 9000 -newkey rsa:2048 -keyout ./cert
 openssl x509 -outform pem -in ./certs/RootCA.pem -out ./certs/RootCA.crt
 openssl req -new -nodes -newkey rsa:2048 -keyout ./certs/localhost.key -out ./certs/localhost.csr -subj "/C=FR/ST=FRANCE/L=PARIS/O=EALIS-DEV-Certificates/CN=localhost"
 ~~~
-# Traefik, à modern proxy manager
+# Traefik, a modern proxy manager
 
 ![Traefik](https://files.nes-france.com/gitlab/traefik.png)
