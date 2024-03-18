@@ -67,7 +67,7 @@ services:
       - "traefik.http.services.maildev.loadbalancer.server.port=1080"
   #=====================
   openssl:
-    image: ealis/openssl:1.1
+    image: gitlab.ealis-cloud.com:5050/nes/docker-images/openssl:1.1
     container_name: openssl
     volumes:
       - ./openssl/generate-certs.sh:/home/openssl/generate-certs
