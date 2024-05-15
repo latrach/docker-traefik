@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   #=====================
   # https://traefik.docker.localhost
@@ -74,9 +73,23 @@ services:
       - ./openssl/domains.ext:/home/openssl/domains.ext
       - ./certs:/home/openssl/certs
 
+  #=====================
+  keycloak:
+    image: bitnami/keycloak:21-debian-11
+    container_name: keycloak
+    env_file:
+      - ./.env.local
+    ports:
+      - "7080:7080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.entrypoints=http,https"
+      - "traefik.http.routers.keycloak.rule=Host(`keycloak.docker.localhost`)"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=7080"
+
 volumes:
   portainer:
-    name: portainer
 
 networks:
   default:
