@@ -90,6 +90,7 @@ services:
 
 volumes:
   portainer:
+    name: portainer
 
 networks:
   default:
