@@ -35,9 +35,9 @@ services:
       - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
       - portainer:/data
+    environment:
+      - TZ=Europe/Paris
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=http,https"
@@ -66,27 +66,13 @@ services:
       - "traefik.http.services.maildev.loadbalancer.server.port=1080"
   #=====================
   openssl:
-    image: gitlab.ealis-cloud.com:5050/nes/docker-images/openssl:1.1
+    image: slatrach/openssl:1.1
     container_name: openssl
+    platform: linux/amd64
     volumes:
       - ./openssl/generate-certs.sh:/home/openssl/generate-certs
       - ./openssl/domains.ext:/home/openssl/domains.ext
       - ./certs:/home/openssl/certs
-
-  #=====================
-  keycloak:
-    image: bitnami/keycloak:21-debian-11
-    container_name: keycloak
-    env_file:
-      - ./.env.local
-    ports:
-      - "7080:7080"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.entrypoints=http,https"
-      - "traefik.http.routers.keycloak.rule=Host(`keycloak.docker.localhost`)"
-      - "traefik.http.routers.keycloak.tls=true"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=7080"
 
 volumes:
   portainer:
