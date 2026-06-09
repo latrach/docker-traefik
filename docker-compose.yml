@@ -74,7 +74,7 @@ services:
       - ./openssl/domains.ext:/home/openssl/domains.ext
       - ./certs:/home/openssl/certs
 
-  #=====================
+  #====================
   # keycloak:
   #   image: bitnami/keycloak:21-debian-11
   #   container_name: keycloak
