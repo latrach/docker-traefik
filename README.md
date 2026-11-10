@@ -12,6 +12,10 @@ Stack Docker locale fournissant un point d'entrée TLS unique pour les projets d
 | Portainer | `portainer/portainer-ce:2.19.4` | https://portainer.docker.localhost  | 9000           |
 | Maildev   | `maildev/maildev:2.0.5`         | https://maildev.docker.localhost    | 1025, 1080     |
 | OpenSSL   | `slatrach/openssl:1.1`          | — (génère les certificats)          | —              |
+| MySQL     | `mysql:8.0.32`                  | — (`mysql:3306` sur le réseau `traefik`) | 3306      |
+
+MySQL utilise le volume nommé existant `mysql` (`external: true`) et lit `MYSQL_ROOT_PASSWORD` dans `.env.local`
+(non versionné, à créer avant le premier démarrage).
 
 Les conteneurs d'autres projets se rattachent au réseau Docker partagé `traefik` pour être exposés automatiquement.
 

@@ -73,6 +73,20 @@ services:
       - ./openssl/generate-certs.sh:/home/openssl/generate-certs
       - ./openssl/domains.ext:/home/openssl/domains.ext
       - ./certs:/home/openssl/certs
+  #=====================
+  # MySQL local partagé des projets (mysql:3306 sur le réseau traefik, localhost:3306 depuis le poste)
+  # MYSQL_ROOT_PASSWORD dans .env.local (non versionné)
+  mysql:
+    image: mysql:8.0.32
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+    env_file:
+      - ./.env.local
+    labels:
+      - "traefik.enable=false"
 
   #====================
   # keycloak:
@@ -92,6 +106,10 @@ services:
 volumes:
   portainer:
     name: portainer
+  # Volume existant (créé par l'ancienne stack docker-databases) : repris tel quel, jamais recréé
+  mysql:
+    name: mysql
+    external: true
 
 networks:
   default:
